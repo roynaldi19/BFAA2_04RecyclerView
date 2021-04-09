@@ -1,26 +1,20 @@
 package com.example.bfaa2_04recyclerview
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import kotlinx.android.synthetic.main.item_row_hero.view.*
+import com.example.bfaa2_04recyclerview.databinding.ItemRowHeroBinding
 
 class ListHeroAdapter(private val listHero: ArrayList<Hero>) :
     RecyclerView.Adapter<ListHeroAdapter.ListViewHolder>() {
 
-    private var onItemClickCallback: OnItemClickCallback? = null
 
-    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
-        this.onItemClickCallback = onItemClickCallback
-    }
-
-    override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): ListViewHolder {
-        val view =
-            LayoutInflater.from(viewGroup.context).inflate(R.layout.item_row_hero, viewGroup, false)
-        return ListViewHolder(view)
+    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ListViewHolder {
+        val binding =
+            ItemRowHeroBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
+        return ListViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
@@ -29,22 +23,17 @@ class ListHeroAdapter(private val listHero: ArrayList<Hero>) :
 
     override fun getItemCount(): Int = listHero.size
 
-    inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ListViewHolder(private val binding: ItemRowHeroBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(hero: Hero) {
-            with(itemView) {
-                Glide.with(itemView.context)
-                    .load(hero.photo)
-                    .apply(RequestOptions().override(55, 55))
-                    .into(img_item_photo)
-                tv_item_name.text = hero.name
-                tv_item_description.text = hero.description
+            with(binding) {
+                Glide.with(itemView.context).load(hero.photo)
+                    .apply(RequestOptions().override(55, 55)).into(imgItemPhoto)
+                tvItemName.text = hero.name
+                tvItemDescription.text = hero.description
 
-                itemView.setOnClickListener { onItemClickCallback?.onItemClicked(hero) }
             }
         }
     }
 
-    interface OnItemClickCallback {
-        fun onItemClicked(data: Hero)
-    }
 }
