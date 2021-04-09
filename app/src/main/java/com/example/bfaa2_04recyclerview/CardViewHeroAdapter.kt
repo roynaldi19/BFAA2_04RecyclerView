@@ -63,5 +63,7 @@ class CardViewHeroAdapter(private val listHero: ArrayList<Hero>) :
 
         }
     }
+
+
 }
 
